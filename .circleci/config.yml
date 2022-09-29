@@ -1,12 +1,12 @@
 version: 2.1
 
 orbs:
-  doctl: digitalocean/cli@0.1.1
+  k8s: digitalocean/k8s@0.1.1
 
 workflows:
     install_and_configure_cli:
       jobs:
-        - doctl/install_and_initialize_cli:
+        - k8s/install_and_initialize_cli:
             context: DigitalOcean
             executor: doctl/default
 
