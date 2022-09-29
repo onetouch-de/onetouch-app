@@ -41,5 +41,6 @@ jobs:
       - k8s/initialize:
           cluster: onetouch-cluster 
       - run: |
-          sed 's|image:.*|image:parmar/onetouch-app:${CIRCLE_SHA1}|' ./kubernetes/Deployment.yaml
-          kubectl apply -f ./kubernetes/
+          cd ./kubernetes
+          cat ./Deplyoment.yaml | sed -E "s|image:.+$|image: parmar/onetouch-app:${CIRCLE_SHA1}|" > ./Deployment.new.yaml
+          kubectl apply -f ./Deployment.new.yaml
