@@ -4,18 +4,11 @@ orbs:
   doctl: digitalocean/cli@0.1.1
   k8s: digitalocean/k8s@0.1.1
 
-commands:
-  install:
-    steps:
-      - k8s/install_and_initialize_cli:
-          context: DigitalOcean
-          executor: doctl/default
-          cluster: onetouch-cluster
-
 workflows:
     install_and_configure_cli:
       jobs:
-        - deploy_to_digital_ocean
+        - deploy_to_digital_ocean:
+            context: DigitalOcean
 
 jobs:
   build:
@@ -37,7 +30,11 @@ jobs:
               docker push "parmar/onetouch-app:${CIRCLE_SHA1}"
             fi
   deploy_to_digital_ocean:
+    docker:
+      - image: cimg/base:stable
     steps:
-      - install
+      - k8s/install
+      - k8s/initialize:
+          cluster: onetouch-cluster
       - run: |
           kubectl get pods
