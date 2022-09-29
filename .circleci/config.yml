@@ -1,13 +1,14 @@
 version: 2.1
 
 orbs:
-  k8s: digitalocean/k8s@0.1.1
+  doctl: digitalocean/cli@1.0.0
 
 workflows:
-    example-workflow:
+    install_and_configure_cli:
       jobs:
-        - k8s/install_and_initialize_cli:
-            cluster: onetouch-cluster 
+        - doctl/install_and_initialize_cli:
+            context: DigitalOcean
+            executor: doctl/default
 
 jobs:
   build:
@@ -27,4 +28,4 @@ jobs:
               docker login -u $DOCKER_USER -p $DOCKER_PASS
               docker tag app "parmar/onetouch-app:${CIRCLE_SHA1}"
               docker push "parmar/onetouch-app:${CIRCLE_SHA1}"
-            fi  
+            fi 
