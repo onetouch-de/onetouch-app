@@ -2,12 +2,12 @@ version: 2.1
 
 jobs:
   build:
-    machine:
-      image: ubuntu-2004:current
-      docker_layer_caching: true
-    steps: 
-      - run: |
-        echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
-
-      - run: docker build -t parmar/onetouch-app:$CIRCLE_BRANCH .
-      - run: docker push parmar/onetouch-app:$CIRCLE_BRANCH
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build docker image
+          command: |
+            docker build nparmar/onetouch-app .
