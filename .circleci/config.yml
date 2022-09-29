@@ -31,6 +31,8 @@ jobs:
               docker push "parmar/onetouch-app:${CIRCLE_SHA1}"
             fi
   deploy_to_digital_ocean:
+    requires:
+      - build
     docker:
       - image: cimg/base:stable
     steps:
@@ -39,5 +41,5 @@ jobs:
       - k8s/initialize:
           cluster: onetouch-cluster    
       - run: |
-          sed 's|image:.*$|image:parmar/onetouch-app:${CIRCLE_SHA1}|'
+          sed 's|image:.*|image:parmar/onetouch-app:${CIRCLE_SHA1}|'
           kubectl apply -f ./kubernetes/
