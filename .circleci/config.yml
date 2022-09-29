@@ -10,6 +10,7 @@ workflows:
         - k8s/install_and_initialize_cli:
             context: DigitalOcean
             executor: doctl/default
+            cluster: onetouch-cluster
 
 jobs:
   build:
