@@ -1,5 +1,15 @@
 version: 2.1
 
+orbs:
+  k8s: digitalocean/k8s@0.1.1
+
+workflows:
+  build:
+    jobs:
+      - build
+      - install_and_initialize_cli:
+          context: DigitalOcean
+
 jobs:
   build:
     docker:
@@ -18,4 +28,12 @@ jobs:
               docker login -u $DOCKER_USER -p $DOCKER_PASS
               docker tag app "parmar/onetouch-app:${CIRCLE_SHA1}"
               docker push "parmar/onetouch-app:${CIRCLE_SHA1}"
-            fi   
+            fi  
+  install_and_initialize_cli:
+    cluster: onetouch-cluster
+    digitialocean-access-token: $ACCESS_TOKEN
+    steps:
+      - run:
+          name: deploy 
+          command: |
+            kubectl get pods
