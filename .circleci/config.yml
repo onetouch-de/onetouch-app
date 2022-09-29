@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  doctl: digitalocean/cli@1.0.0
+  doctl: digitalocean/cli@0.1.1
 
 workflows:
     install_and_configure_cli:
