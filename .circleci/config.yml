@@ -1,36 +1,16 @@
-# This config is equivalent to both the '.circleci/extended/orb-free.yml' and the base '.circleci/config.yml'
 version: 2.1
 
-# Orbs are reusable packages of CircleCI configuration that you may share across projects, enabling you to create encapsulated, parameterized commands, jobs, and executors that can be used across multiple projects.
-# See: https://circleci.com/docs/2.0/orb-intro/
-orbs:
-  node: circleci/node@4.7
-  docker: circleci/docker@1.7.0
-
 jobs:
-  docker-build-job:
-    docker:
-      - image: cimg/base:stable
-    steps:
-      - docker/build:
-          image: parmar/onetouch-app
-
-# Invoke jobs via workflows
-# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
-workflows:
-  sample: # This is the name of the workflow, feel free to change it to better match your workflow.
-    # Inside the workflow, you define the jobs you want to run.
-    jobs:
-      - node/test:
-          # This is the node version to use for the `cimg/node` tag
-          # Relevant tags can be found on the CircleCI Developer Hub
-          # https://circleci.com/developer/images/image/cimg/node
-          version: '16.10'
-          # If you are using yarn, change the line below from "npm" to "yarn"
-          pkg-manager: npm
-  docker-build:
-    jobs:
-      - docker-build-job
+  build:
+    machine:
+      image: ubuntu-2004:current
+      docker_layer_caching: true
+    steps: 
+      - run: |
+        echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
+        
+      - run: docker build -t parmar/onetouch-app:$CIRCLE_BRANCH .
+      - run: docker push parmar/onetouch-app:$CIRCLE_BRANCH
 
           
 
