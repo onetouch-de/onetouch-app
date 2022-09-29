@@ -34,9 +34,10 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
+      - checkout
       - k8s/install
       - k8s/initialize:
           cluster: onetouch-cluster    
       - run: |
           sed 's|image:.*$|image:parmar/onetouch-app:${CIRCLE_SHA1}|'
-          kubectl apply -f kubernetes/
+          kubectl apply -f ./kubernetes/
