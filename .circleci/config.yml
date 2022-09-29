@@ -10,7 +10,11 @@ workflows:
         - k8s/install_and_initialize_cli:
             context: DigitalOcean
             executor: doctl/default
-            cluster: onetouch-cluster
+            cluster: onetouch-cluster  
+        - run:
+            name: get pods
+            command: |
+              kubectl get pods 
 
 jobs:
   build:
