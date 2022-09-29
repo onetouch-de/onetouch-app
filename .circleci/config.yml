@@ -10,4 +10,4 @@ jobs:
       - run:
           name: Build docker image
           command: |
-            docker build nparmar/onetouch-app .
+            docker build -t nparmar/onetouch-app .
