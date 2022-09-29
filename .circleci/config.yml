@@ -1,6 +1,7 @@
 version: 2.1
 
 orbs:
+  doctl: digitalocean/cli@0.1.1
   k8s: digitalocean/k8s@0.1.1
 
 workflows:
@@ -8,7 +9,7 @@ workflows:
       jobs:
         - k8s/install_and_initialize_cli:
             context: DigitalOcean
-            executor: docker
+            executor: doctl/default
 
 jobs:
   build:
