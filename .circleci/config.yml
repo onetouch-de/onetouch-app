@@ -7,6 +7,7 @@ orbs:
 workflows:
     install_and_configure_cli:
       jobs:
+        - build
         - deploy_to_digital_ocean:
             context: DigitalOcean
 
@@ -35,6 +36,7 @@ jobs:
     steps:
       - k8s/install
       - k8s/initialize:
-          cluster: onetouch-cluster
+          cluster: onetouch-cluster    
       - run: |
-          kubectl get pods
+          sed 's|image:.*$|image:parmar/onetouch-app:${CIRCLE_SHA1}|'
+          kubectl apply -f kubernetes/
