@@ -10,6 +10,8 @@ workflows:
         - build
         - deploy_to_digital_ocean:
             context: DigitalOcean
+            requires:
+              - build
 
 jobs:
   build:
@@ -31,8 +33,6 @@ jobs:
               docker push "parmar/onetouch-app:${CIRCLE_SHA1}"
             fi
   deploy_to_digital_ocean:
-    requires:
-      - build
     docker:
       - image: cimg/base:stable
     steps:
