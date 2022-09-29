@@ -7,14 +7,8 @@ orbs:
 workflows:
     install_and_configure_cli:
       jobs:
-        - k8s/install_and_initialize_cli:
+        - deploy:
             context: DigitalOcean
-            executor: doctl/default
-            cluster: onetouch-cluster  
-        - run:
-            name: get pods
-            command: |
-              kubectl get pods 
 
 jobs:
   build:
@@ -34,4 +28,15 @@ jobs:
               docker login -u $DOCKER_USER -p $DOCKER_PASS
               docker tag app "parmar/onetouch-app:${CIRCLE_SHA1}"
               docker push "parmar/onetouch-app:${CIRCLE_SHA1}"
-            fi 
+            fi
+  deploy:
+    docker:
+      - image: doctl/default
+    steps:
+      - k8s/install_and_initialize_cli:
+          executor: doctl/default
+          cluster: onetouch-cluster
+      - run:
+          name: deploy 
+          command: |
+            kubectl get pods
